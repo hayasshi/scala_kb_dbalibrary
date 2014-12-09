@@ -6,7 +6,7 @@ abstract class BaseSpec extends FunSuite {
       val start = System.currentTimeMillis
       process
       val end = System.currentTimeMillis
-      println(title + ": " + (end - start) + " ms")
+      println(this.getClass.getSimpleName + " - " + title + ": " + (end - start) + " ms")
     }
   }
 }

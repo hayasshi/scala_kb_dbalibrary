@@ -1,10 +1,12 @@
+import SlickSample._
+
 import scala.slick.driver.JdbcDriver.simple._
 
 import java.sql.Timestamp
 
 class SlickSpec extends BaseSpec {
 
-  implicit val session = Database.forURL("jdbc:h2:mem:test", driver = "org.h2.Driver").createSession()
+  implicit val session = Database.forURL("jdbc:h2:mem:slicktest", driver = "org.h2.Driver").createSession()
 
   runTest("create") {
     SlickSample.query.ddl.create
@@ -18,6 +20,12 @@ class SlickSpec extends BaseSpec {
 
   runTest("update") {
     SlickSample.query.filter(_.id === 1L).update(User(1L, "テスト", Option(new Timestamp(System.currentTimeMillis))))
+  }
+
+  runTest("select") {
+    val u1 = SlickSample.query.filter(_.id === 2L).firstOption
+    val u2 = (for (u <- SlickSample.query if u.id === 2L) yield {u}).firstOption
+    println(u1, u2)
   }
 
   runTest("delete") {
