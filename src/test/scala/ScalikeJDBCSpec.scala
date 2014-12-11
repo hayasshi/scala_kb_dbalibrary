@@ -1,23 +1,28 @@
 import java.sql.{Connection, DriverManager, Timestamp}
 
 import ScalikeJDBCSample._
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, BeforeAndAfter}
 
 import scalikejdbc._
 
-class ScalikeJDBCSpec extends BaseSpec {
+class ScalikeJDBCSpec extends BaseSpec with BeforeAndAfterAll {
 
-  // Connection settings
-  Class.forName("org.h2.Driver")
-  //val db = DB( DriverManager.getConnection("jdbc:h2:mem:scalickjdbctest", "sa", ""))
-  ConnectionPool.singleton("jdbc:h2:mem:scalickjdbctest", "sa", "")
+  override def beforeAll(): Unit = {
+    Class.forName("org.h2.Driver")
+    ConnectionPool.singleton("jdbc:h2:mem:scalickjdbctest", "sa", "")
+  }
 
-  runTest("create") {
+  override def afterAll(): Unit =  {
+    ConnectionPool.closeAll()
+  }
+
+  testWithTime("create") {
     implicit val session = DB.autoCommitSession()
     sql"CREATE TABLE IF NOT EXISTS USERS (ID BIGINT PRIMARY KEY AUTO_INCREMENT, NAME TEXT NOT NULL, LAST_LOGIN TIMESTAMP)".execute.apply()
     session.close()
   }
 
-  runTest("insert") {
+  testWithTime("insert") {
     DB.localTx { implicit session =>
       val column = User.column
       (1 to 1000) foreach { i =>
@@ -28,7 +33,7 @@ class ScalikeJDBCSpec extends BaseSpec {
     }
   }
 
-  runTest("update") {
+  testWithTime("update") {
     DB.localTx { implicit session =>
       withSQL {
         val column = User.column
@@ -37,7 +42,7 @@ class ScalikeJDBCSpec extends BaseSpec {
     }
   }
 
-  runTest("select") {
+  testWithTime("select") {
     val u = User.syntax("u")
     DB autoCommit { implicit session =>
       val target = withSQL {
@@ -47,7 +52,7 @@ class ScalikeJDBCSpec extends BaseSpec {
     }
   }
 
-  runTest("delete") {
+  testWithTime("delete") {
     DB.localTx { implicit session =>
       withSQL {
         val column = User.column

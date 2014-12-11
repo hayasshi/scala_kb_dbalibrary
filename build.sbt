@@ -19,3 +19,5 @@ libraryDependencies ++= Seq(
   // Test
   "org.scalatest" %% "scalatest" % "2.1.6" % "test"
 )
+
+parallelExecution in Test := false

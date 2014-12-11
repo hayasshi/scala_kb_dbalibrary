@@ -1,7 +1,7 @@
 import org.scalatest.FunSuite
 
 abstract class BaseSpec extends FunSuite {
-  def runTest(title: String)(process: => Unit) {
+  def testWithTime(title: String)(process: => Unit) {
     test(title) {
       val start = System.currentTimeMillis
       process
