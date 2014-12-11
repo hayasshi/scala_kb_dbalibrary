@@ -2,7 +2,7 @@ name := """scala_kb_dbalibrary"""
 
 version := "1.0"
 
-scalaVersion := "2.11.1"
+scalaVersion := "2.11.4"
 
 libraryDependencies ++= Seq(
   // H2 Database
@@ -15,6 +15,9 @@ libraryDependencies ++= Seq(
   //"org.slf4j" % "slf4j-nop" % "1.6.4",
   // Skinny ORM
   "org.skinny-framework" %% "skinny-orm"      % "1.3.6",
+  //"org.slf4j" % "slf4j-nop" % "1.6.4",
+  // ScalaActiveRecord
+  "com.github.aselab" %% "scala-activerecord" % "0.3.0",
   //"org.slf4j" % "slf4j-nop" % "1.6.4",
   // Test
   "org.scalatest" %% "scalatest" % "2.1.6" % "test"
