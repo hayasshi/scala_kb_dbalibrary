@@ -1,12 +1,17 @@
 import SlickSample._
+import org.scalatest.BeforeAndAfterAll
 
 import scala.slick.driver.JdbcDriver.simple._
 
 import java.sql.Timestamp
 
-class SlickSpec extends BaseSpec {
+class SlickSpec extends BaseSpec with BeforeAndAfterAll {
 
-  implicit val session = Database.forURL("jdbc:h2:mem:slicktest", driver = "org.h2.Driver").createSession()
+  implicit lazy val session = Database.forURL("jdbc:h2:mem:slicktest", driver = "org.h2.Driver").createSession()
+
+  override def afterAll(): Unit = {
+    session.close()
+  }
 
   testWithTime("create") {
     SlickSample.query.ddl.create
@@ -43,5 +48,4 @@ class SlickSpec extends BaseSpec {
     println(SlickSample.query.filter(_.id < 1L).selectStatement)
   }
 
-  session.close
 }
