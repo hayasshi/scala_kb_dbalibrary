@@ -13,6 +13,9 @@ libraryDependencies ++= Seq(
   // ScalikeJDBC
   "org.scalikejdbc" %% "scalikejdbc" % "2.2.0",
   //"org.slf4j" % "slf4j-nop" % "1.6.4",
+  // Skinny ORM
+  "org.skinny-framework" %% "skinny-orm"      % "1.3.6",
+  //"org.slf4j" % "slf4j-nop" % "1.6.4",
   // Test
   "org.scalatest" %% "scalatest" % "2.1.6" % "test"
 )

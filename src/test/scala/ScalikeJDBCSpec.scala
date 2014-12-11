@@ -8,11 +8,12 @@ class ScalikeJDBCSpec extends BaseSpec {
 
   // Connection settings
   Class.forName("org.h2.Driver")
+  //val db = DB( DriverManager.getConnection("jdbc:h2:mem:scalickjdbctest", "sa", ""))
   ConnectionPool.singleton("jdbc:h2:mem:scalickjdbctest", "sa", "")
 
   runTest("create") {
     implicit val session = DB.autoCommitSession()
-    sql"CREATE TABLE USERS (ID BIGINT PRIMARY KEY AUTO_INCREMENT, NAME TEXT NOT NULL, LAST_LOGIN TIMESTAMP)".execute.apply()
+    sql"CREATE TABLE IF NOT EXISTS USERS (ID BIGINT PRIMARY KEY AUTO_INCREMENT, NAME TEXT NOT NULL, LAST_LOGIN TIMESTAMP)".execute.apply()
     session.close()
   }
 
@@ -21,7 +22,7 @@ class ScalikeJDBCSpec extends BaseSpec {
       val column = User.column
       (1 to 1000) foreach { i =>
         withSQL {
-          insert.into(User).namedValues(column.name -> s"テスト${}i}", column.lastLogin -> None)
+          insert.into(User).namedValues(column.name -> s"テスト${i}", column.lastLogin -> None)
         }.updateAndReturnGeneratedKey.apply()
       }
     }
@@ -39,9 +40,10 @@ class ScalikeJDBCSpec extends BaseSpec {
   runTest("select") {
     val u = User.syntax("u")
     DB autoCommit { implicit session =>
-      withSQL {
+      val target = withSQL {
         select.from(User as u).where.eq(u.id, 100)
       }.map(rs => User(rs.long("ID"), rs.string("NAME"), rs.timestampOpt("LAST_LOGIN"))).single.apply()
+      println(target)
     }
   }
 

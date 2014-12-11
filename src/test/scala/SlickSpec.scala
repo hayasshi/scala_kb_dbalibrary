@@ -23,8 +23,8 @@ class SlickSpec extends BaseSpec {
   }
 
   runTest("select") {
-    val u1 = SlickSample.query.filter(_.id === 2L).firstOption
-    val u2 = (for (u <- SlickSample.query if u.id === 2L) yield {u}).firstOption
+    val u1 = SlickSample.query.filter(_.id === 100L).firstOption
+    val u2 = (for (u <- SlickSample.query if u.id === 100L) yield {u}).firstOption
     println(u1, u2)
   }
 
