@@ -26,8 +26,9 @@ class ScalikeJDBCSpec extends BaseSpec with BeforeAndAfterAll {
     DB.localTx { implicit session =>
       val column = User.column
       (1 to 1000) foreach { i =>
-        withSQL {
-          insert.into(User).namedValues(column.name -> s"テスト${i}", column.lastLogin -> None)
+        val createdId = withSQL {
+          val now = Some(new Timestamp(System.currentTimeMillis))
+          insert.into(User).namedValues(column.name -> s"テスト${i}", column.lastLogin -> now)
         }.updateAndReturnGeneratedKey.apply()
       }
     }
@@ -37,18 +38,17 @@ class ScalikeJDBCSpec extends BaseSpec with BeforeAndAfterAll {
     DB.localTx { implicit session =>
       withSQL {
         val column = User.column
-        update(User).set(column.name -> "testes", column.lastLogin -> new Timestamp(System.currentTimeMillis())).where.eq(column.id, 2)
+        update(User).set(column.lastLogin -> new Timestamp(System.currentTimeMillis())).where.gt(column.id, 500)
       }.update.apply()
     }
   }
 
   testWithTime("select") {
     val u = User.syntax("u")
-    DB autoCommit { implicit session =>
+    DB.autoCommit { implicit session =>
       val target = withSQL {
         select.from(User as u).where.eq(u.id, 100)
       }.map(rs => User(rs.long("ID"), rs.string("NAME"), rs.timestampOpt("LAST_LOGIN"))).single.apply()
-      println(target)
     }
   }
 
@@ -56,7 +56,7 @@ class ScalikeJDBCSpec extends BaseSpec with BeforeAndAfterAll {
     DB.localTx { implicit session =>
       withSQL {
         val column = User.column
-        update(User).set(column.name -> "testes", column.lastLogin -> new Timestamp(System.currentTimeMillis())).where.eq(column.id, 2)
+        delete.from(User).where.eq(column.id, 2)
       }.update.apply()
     }
   }

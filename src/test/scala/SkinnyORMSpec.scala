@@ -28,7 +28,7 @@ class SkinnyORMSpec extends BaseSpec with BeforeAndAfterAll {
   }
 
   testWithTime("update") {
-    User.updateById(2).withAttributes('name -> "test")
+    User.updateBy(sqls.gt(User.column.id, 500)).withAttributes('last_login -> new Timestamp(System.currentTimeMillis))
   }
 
   testWithTime("select") {

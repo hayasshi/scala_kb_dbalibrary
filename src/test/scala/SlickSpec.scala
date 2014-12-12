@@ -14,38 +14,37 @@ class SlickSpec extends BaseSpec with BeforeAndAfterAll {
   }
 
   testWithTime("create") {
-    SlickSample.query.ddl.create
+    MyTables.users.ddl.create
   }
 
   testWithTime("insert") {
     (1 to 1000) foreach { i =>
-      SlickSample.query.insert(new User(0, "test" + i, Option(new Timestamp(System.currentTimeMillis))))
+      MyTables.users.insert(new User(0, "test" + i, Some(new Timestamp(System.currentTimeMillis))))
     }
   }
 
   testWithTime("update") {
-    SlickSample.query.filter(_.id === 1L).update(User(1L, "テスト", Option(new Timestamp(System.currentTimeMillis))))
+    MyTables.users.filter(_.id >= 500L).map(_.lastLogin).update(Some(new Timestamp(System.currentTimeMillis)))
   }
 
   testWithTime("select") {
-    val u1 = SlickSample.query.filter(_.id === 100L).firstOption
-    val u2 = (for (u <- SlickSample.query if u.id === 100L) yield {u}).firstOption
-    println(u1, u2)
+    val u1 = MyTables.users.filter(_.id === 100L).firstOption
+    val ulist = (for (u <- MyTables.users if u.id >= 100L) yield {u}).list
   }
 
   testWithTime("delete") {
-    SlickSample.query.filter(_.id === 1L).delete
+    MyTables.users.filter(_.id === 1L).delete
   }
 
   testWithTime("Plain SQL") {
     import scala.slick.jdbc.StaticQuery.interpolation
     import scala.slick.jdbc.GetResult
     implicit val getUser = GetResult(rs => User(rs.nextLong, rs.nextString, rs.nextTimestampOption))
-    println(sql"select * from USERS where ID = 2".as[User].list)
+    sql"select * from USERS where ID = 2".as[User].list
   }
 
   testWithTime("check SQL") {
-    println(SlickSample.query.filter(_.id < 1L).selectStatement)
+    println(MyTables.users.filter(_.id < 1L).selectStatement)
   }
 
 }

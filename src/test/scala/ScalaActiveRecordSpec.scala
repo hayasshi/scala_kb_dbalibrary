@@ -4,6 +4,9 @@ import org.scalatest.BeforeAndAfterAll
 
 import ScalaActiveRecordSample._
 
+import com.github.aselab.activerecord._
+import com.github.aselab.activerecord.dsl._
+
 class ScalaActiveRecordSpec extends BaseSpec with BeforeAndAfterAll {
 
   override def beforeAll(): Unit = {
@@ -21,14 +24,18 @@ class ScalaActiveRecordSpec extends BaseSpec with BeforeAndAfterAll {
 
   testWithTime("insert") {
     (1 to 1000).foreach { i =>
-      User(s"テスト${i}", Option(new Timestamp(System.currentTimeMillis()))).save()
+      User(s"テスト${i}", Some(new Timestamp(System.currentTimeMillis()))).save()
     }
   }
 
   testWithTime("update") {
-    val updated = User.find(2).getOrElse(User("test", Option(new Timestamp(System.currentTimeMillis()))))
-    updated.name = "test"
-    updated.save()
+//     User.where(_.id >= 500L).toList foreach { user =>
+    (500 to 1000).foreach { i =>
+      User.find(i).foreach { user =>
+        user.lastLogin = Some(new Timestamp(System.currentTimeMillis))
+        user.save()
+      }
+    }
   }
 
   testWithTime("select") {

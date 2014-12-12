@@ -4,7 +4,9 @@ import scalikejdbc._
 import skinny.orm._
 
 object SkinnyORMSample {
+
   case class User(id: Long, name: String, lastLogin: Option[Timestamp])
+
   object User extends SkinnyCRUDMapper[User] {
     override val tableName = "USERS"
     override lazy val defaultAlias = createAlias("m")
@@ -14,4 +16,5 @@ object SkinnyORMSample {
       lastLogin = rs.get(n.lastLogin)
     )
   }
+  
 }
