@@ -1,8 +1,7 @@
 import java.sql.Timestamp
-
-import SkinnyORMSample._
 import org.scalatest.BeforeAndAfterAll
 import scalikejdbc._
+import SkinnyORMSample._
 
 class SkinnyORMSpec extends BaseSpec with BeforeAndAfterAll {
 
@@ -31,7 +30,7 @@ class SkinnyORMSpec extends BaseSpec with BeforeAndAfterAll {
   }
 
   testWithTime("select") {
-    println(User.findById(100))
+    logger.info(User.findById(100).toString)
   }
 
   testWithTime("delete") {

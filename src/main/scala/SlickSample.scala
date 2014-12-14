@@ -1,6 +1,5 @@
 import scala.slick.driver.JdbcDriver.simple._
 import scala.slick.lifted.Tag
-
 import java.sql.Timestamp
 
 object SlickSample {

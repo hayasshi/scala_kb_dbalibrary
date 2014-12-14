@@ -1,5 +1,4 @@
 import java.sql.Timestamp
-
 import com.github.aselab.activerecord._
 import com.github.aselab.activerecord.dsl._
 

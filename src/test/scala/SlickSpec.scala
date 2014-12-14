@@ -1,9 +1,7 @@
-import SlickSample._
 import org.scalatest.BeforeAndAfterAll
-
-import scala.slick.driver.JdbcDriver.simple._
-
 import java.sql.Timestamp
+import scala.slick.driver.JdbcDriver.simple._
+import SlickSample._
 
 class SlickSpec extends BaseSpec with BeforeAndAfterAll {
 
@@ -40,11 +38,12 @@ class SlickSpec extends BaseSpec with BeforeAndAfterAll {
     import scala.slick.jdbc.StaticQuery.interpolation
     import scala.slick.jdbc.GetResult
     implicit val getUser = GetResult(rs => User(rs.nextLong, rs.nextString, rs.nextTimestampOption))
-    sql"select * from USERS where ID = 2".as[User].list
+    val id = 2
+    sql"select * from USERS where ID = ${id}".as[User].list
   }
 
   testWithTime("check SQL") {
-    println(MyTables.users.filter(_.id < 1L).selectStatement)
+    logger.info(MyTables.users.filter(_.id < 1L).selectStatement)
   }
 
 }

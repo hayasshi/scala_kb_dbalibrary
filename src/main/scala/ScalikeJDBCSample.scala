@@ -1,5 +1,4 @@
 import java.sql.Timestamp
-
 import scalikejdbc._
 
 object ScalikeJDBCSample {
@@ -8,7 +7,7 @@ object ScalikeJDBCSample {
 
   object User extends SQLSyntaxSupport[User] {
     override val tableName = "USERS"
-    def apply(rn: ResultName[User])(rs: WrappedResultSet): User = autoConstruct(rs, rn)
+    def apply(rn: SyntaxProvider[User])(rs: WrappedResultSet): User = autoConstruct(rs, rn.resultName)
   }
   
 }

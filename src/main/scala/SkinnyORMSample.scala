@@ -1,5 +1,4 @@
 import java.sql.Timestamp
-
 import scalikejdbc._
 import skinny.orm._
 

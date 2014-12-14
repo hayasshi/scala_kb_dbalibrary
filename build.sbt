@@ -6,7 +6,6 @@ libraryDependencies ++= Seq(
   "com.h2database" % "h2" % "1.4.182",
   // Slick
   "com.typesafe.slick" %% "slick" % "2.1.0",
-  "org.slf4j" % "slf4j-nop" % "1.6.4",
   // ScalikeJDBC
   "org.scalikejdbc" %% "scalikejdbc" % "2.2.0",
   "org.scalikejdbc" %% "scalikejdbc-syntax-support-macro" % "2.2.0",
@@ -15,7 +14,8 @@ libraryDependencies ++= Seq(
   // ScalaActiveRecord
   "com.github.aselab" %% "scala-activerecord" % "0.3.0",
   // Test
-  "org.scalatest" %% "scalatest" % "2.2.2" % "test"
+  "ch.qos.logback" %  "logback-classic" % "1.1.2" % "test",
+  "org.scalatest"  %% "scalatest"       % "2.2.2" % "test"
 )
 scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
 parallelExecution in Test := false
