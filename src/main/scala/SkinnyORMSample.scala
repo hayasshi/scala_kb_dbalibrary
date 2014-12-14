@@ -10,11 +10,7 @@ object SkinnyORMSample {
   object User extends SkinnyCRUDMapper[User] {
     override val tableName = "USERS"
     override lazy val defaultAlias = createAlias("m")
-    override def extract(rs: WrappedResultSet, n: ResultName[User]) = new User(
-      id        = rs.get(n.id),
-      name      = rs.get(n.name),
-      lastLogin = rs.get(n.lastLogin)
-    )
+    override def extract(rs: WrappedResultSet, n: ResultName[User]) = autoConstruct(rs, n)
   }
   
 }

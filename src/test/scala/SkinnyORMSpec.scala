@@ -16,9 +16,8 @@ class SkinnyORMSpec extends BaseSpec with BeforeAndAfterAll {
   }
 
   testWithTime("create") {
-    implicit val session = DB.autoCommitSession()
+    implicit val session = AutoSession
     sql"CREATE TABLE IF NOT EXISTS USERS (ID BIGINT PRIMARY KEY AUTO_INCREMENT, NAME TEXT NOT NULL, LAST_LOGIN TIMESTAMP)".execute.apply()
-    session.close()
   }
 
   testWithTime("insert") {
