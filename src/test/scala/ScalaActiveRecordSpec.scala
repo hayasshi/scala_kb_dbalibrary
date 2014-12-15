@@ -1,11 +1,8 @@
 import java.sql.Timestamp
-
 import org.scalatest.BeforeAndAfterAll
-
-import ScalaActiveRecordSample._
-
 import com.github.aselab.activerecord._
 import com.github.aselab.activerecord.dsl._
+import ScalaActiveRecordSample._
 
 class ScalaActiveRecordSpec extends BaseSpec with BeforeAndAfterAll {
 
@@ -39,7 +36,7 @@ class ScalaActiveRecordSpec extends BaseSpec with BeforeAndAfterAll {
   }
 
   testWithTime("select") {
-    println(User.find(3))
+    logger.info(User.find(3).toString)
   }
 
   testWithTime("delete") {

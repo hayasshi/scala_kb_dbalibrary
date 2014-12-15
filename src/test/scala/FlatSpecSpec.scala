@@ -1,36 +1,36 @@
-import org.scalatest.{FlatSpec, BeforeAndAfterAll, BeforeAndAfter}
+import org.scalatest._
+import org.slf4j._
 
-/**
- * Created by daisuke.hayashi on 2014/12/11.
- */
 class FlatSpecSpec extends FlatSpec with BeforeAndAfter with BeforeAndAfterAll {
 
+  lazy val logger = LoggerFactory.getLogger(this.getClass)
+
   override def beforeAll(): Unit = {
-    println("beforeAll")
+    logger.info("beforeAll")
   }
 
   override def afterAll(): Unit = {
-    println("afterAll")
+    logger.info("afterAll")
   }
 
   before {
-    println("before")
+    logger.info("before")
   }
 
   after {
-    println("after")
+    logger.info("after")
   }
 
   "FlatSpecSpec" should "test1" in {
-    println("test1")
+    logger.info("test1")
   }
 
   it should "test2" in {
-    println("test2")
+    logger.info("test2")
   }
 
   it should "test3" in {
-    println("test3")
+    logger.info("test3")
   }
 
 }

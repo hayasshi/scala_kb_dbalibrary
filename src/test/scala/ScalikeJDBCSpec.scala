@@ -1,9 +1,8 @@
 import java.sql.{Connection, DriverManager, Timestamp}
-
-import ScalikeJDBCSample._
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, BeforeAndAfter}
-
+import org.scalatest._
+import org.slf4j._
 import scalikejdbc._
+import ScalikeJDBCSample._
 
 class ScalikeJDBCSpec extends BaseSpec with BeforeAndAfterAll {
 
@@ -12,14 +11,13 @@ class ScalikeJDBCSpec extends BaseSpec with BeforeAndAfterAll {
     ConnectionPool.singleton("jdbc:h2:mem:scalickjdbctest", "sa", "")
   }
 
-  override def afterAll(): Unit =  {
+  override def afterAll(): Unit = {
     ConnectionPool.closeAll()
   }
 
   testWithTime("create") {
-    implicit val session = DB.autoCommitSession()
+    implicit val session = AutoSession
     sql"CREATE TABLE IF NOT EXISTS USERS (ID BIGINT PRIMARY KEY AUTO_INCREMENT, NAME TEXT NOT NULL, LAST_LOGIN TIMESTAMP)".execute.apply()
-    session.close()
   }
 
   testWithTime("insert") {
@@ -48,7 +46,7 @@ class ScalikeJDBCSpec extends BaseSpec with BeforeAndAfterAll {
     DB.autoCommit { implicit session =>
       val target = withSQL {
         select.from(User as u).where.eq(u.id, 100)
-      }.map(rs => User(rs.long("ID"), rs.string("NAME"), rs.timestampOpt("LAST_LOGIN"))).single.apply()
+      }.map(User(u)).single.apply()
     }
   }
 
